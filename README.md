@@ -15,7 +15,7 @@
 | Service | URL | Login |
 |---------|-----|-------|
 | **JupyterLab** | http://your-ip:8888 | No password |
-| **VS Code** | http://your-ip:8443 | Password: `demo` |
+| **VS Code** | http://your-ip:8444 | Password: `demo` |
 | **Superset** | http://your-ip:8088 | admin / admin |
 | **Tile Server** | http://your-ip:7800 | N/A |
 | **Feature Server** | http://your-ip:9001 | N/A |
