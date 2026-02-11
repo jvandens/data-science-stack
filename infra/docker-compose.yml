@@ -21,12 +21,11 @@ services:
                -c maintenance_work_mem=128MB
 
   jupyterlab:
-    image: jupyter/datascience-notebook:python-3.11
+    image: jupyter/minimal-notebook:python-3.11
     container_name: demo-jupyter
     user: root
     environment:
       JUPYTER_ENABLE_LAB: "yes"
-      GRANT_SUDO: "yes"
       POSTGRES_HOST: postgis
       POSTGRES_DB: demo
       POSTGRES_USER: demo
@@ -39,7 +38,7 @@ services:
       - postgis
     command: >
       bash -c "
-      pip install --no-cache-dir geopandas psycopg2-binary sqlalchemy duckdb folium mapclassify &&
+      pip install --no-cache-dir 'numpy<2' pandas geopandas psycopg2-binary sqlalchemy duckdb folium &&
       start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
       "
 
