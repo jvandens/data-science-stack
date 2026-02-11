@@ -28,19 +28,60 @@
 Open http://your-ip:8888, create new notebook:
 
 ```python
+!pip install geoalchemy2
+
 import geopandas as gpd
-from sqlalchemy import create_engine
+from shapely.geometry import Point
+import psycopg2
 
-# Connect to PostGIS
-engine = create_engine('postgresql://demo:demo123@postgis:5432/demo')
+# Create test data
+data = {
+    'name': ['San Francisco', 'New York', 'London'],
+    'population': [874961, 8336817, 8982000],
+    'geometry': [
+        Point(-122.4194, 37.7749),
+        Point(-74.0060, 40.7128),
+        Point(-0.1278, 51.5074)
+    ]
+}
 
-# Load sample data (Natural Earth countries)
-world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+gdf = gpd.GeoDataFrame(data, crs='EPSG:4326')
 
-# Save to PostGIS
-world.to_postgis('countries', engine, if_exists='replace', index=False)
+# Connect with psycopg2 directly
+conn = psycopg2.connect(
+    host='postgis',
+    database='demo',
+    user='demo',
+    password='demo123'
+)
+cur = conn.cursor()
 
-print(f"Loaded {len(world)} countries to PostGIS")
+# Create table
+cur.execute("""
+    DROP TABLE IF EXISTS demo_points;
+    CREATE TABLE demo_points (
+        name VARCHAR(100),
+        population INTEGER,
+        geometry GEOMETRY(POINT, 4326)
+    );
+""")
+
+# Insert data
+for idx, row in gdf.iterrows():
+    cur.execute("""
+        INSERT INTO demo_points (name, population, geometry)
+        VALUES (%s, %s, ST_GeomFromText(%s, 4326))
+    """, (row['name'], row['population'], row.geometry.wkt))
+
+# Create spatial index
+cur.execute("CREATE INDEX demo_points_geom_idx ON demo_points USING GIST (geometry);")
+
+conn.commit()
+cur.close()
+conn.close()
+
+print(f"✓ Created {len(gdf)} cities in PostGIS")
+print(f"✓ View at: http://your-ip:7800")
 ```
 
 ### 2. View Vector Tiles (Browser - 2 min)
