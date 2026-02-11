@@ -1,0 +1,101 @@
+version: '3.8'
+
+# Quick GIS Demo Stack
+# Deploy in Portainer → Stacks → Add Stack → Paste this
+# Demo for 1 hour, then tear down
+
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: demo-postgis
+    environment:
+      POSTGRES_DB: demo
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+    shm_size: 512mb
+    command: >
+      postgres -c shared_buffers=256MB
+               -c work_mem=16MB
+               -c maintenance_work_mem=128MB
+
+  jupyterlab:
+    image: jupyter/scipy-notebook:latest
+    container_name: demo-jupyter
+    user: root
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+      GRANT_SUDO: "yes"
+      POSTGRES_HOST: postgis
+      POSTGRES_DB: demo
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo123
+    ports:
+      - "8888:8888"
+    volumes:
+      - jupyter_data:/home/jovyan/work
+    depends_on:
+      - postgis
+    command: >
+      bash -c "
+      pip install --no-cache-dir geopandas psycopg2-binary sqlalchemy duckdb folium mapclassify &&
+      start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+      "
+
+  vscode:
+    image: codercom/code-server:latest
+    container_name: demo-vscode
+    environment:
+      PASSWORD: demo
+    ports:
+      - "8443:8080"
+    volumes:
+      - vscode_data:/home/coder/project
+
+  superset:
+    image: apache/superset:latest
+    container_name: demo-superset
+    environment:
+      SUPERSET_SECRET_KEY: demo-secret-key-12345
+    ports:
+      - "8088:8088"
+    volumes:
+      - superset_data:/app/superset_home
+    depends_on:
+      - postgis
+    command: >
+      sh -c "
+      superset db upgrade &&
+      superset fab create-admin --username admin --firstname Admin --lastname User --email admin@demo.com --password admin &&
+      superset init &&
+      superset run -h 0.0.0.0 -p 8088
+      "
+
+  pg_tileserv:
+    image: pramsey/pg_tileserv:latest
+    container_name: demo-tileserv
+    environment:
+      DATABASE_URL: postgres://demo:demo123@postgis:5432/demo
+    ports:
+      - "7800:7800"
+    depends_on:
+      - postgis
+
+  pg_featureserv:
+    image: pramsey/pg_featureserv:latest
+    container_name: demo-featureserv
+    environment:
+      DATABASE_URL: postgres://demo:demo123@postgis:5432/demo
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgis
+
+volumes:
+  postgis_data:
+  jupyter_data:
+  vscode_data:
+  superset_data:
