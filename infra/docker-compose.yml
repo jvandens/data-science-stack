@@ -58,7 +58,7 @@ services:
     environment:
       SUPERSET_SECRET_KEY: demo-secret-key-12345
     ports:
-      - "8088:8088"
+      - "8089:8088"
     volumes:
       - superset_data:/app/superset_home
     depends_on:
