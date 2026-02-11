@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Quick GIS Demo Stack
 # Deploy in Portainer → Stacks → Add Stack → Paste this
 # Demo for 1 hour, then tear down
