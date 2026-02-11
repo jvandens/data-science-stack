@@ -48,7 +48,7 @@ services:
     environment:
       PASSWORD: demo
     ports:
-      - "8443:8080"
+      - "8444:8080"
     volumes:
       - vscode_data:/home/coder/project
 
