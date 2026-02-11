@@ -88,7 +88,7 @@ services:
     environment:
       DATABASE_URL: postgres://demo:demo123@postgis:5432/demo
     ports:
-      - "9000:9000"
+      - "9001:9000"
     depends_on:
       - postgis
 
