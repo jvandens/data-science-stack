@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: demo
       POSTGRES_PASSWORD: demo123
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgis_data:/var/lib/postgresql/data
     shm_size: 512mb
@@ -75,7 +75,7 @@ services:
     image: pramsey/pg_tileserv:latest
     container_name: demo-tileserv
     environment:
-      DATABASE_URL: postgres://demo:demo123@postgis:5432/demo
+      DATABASE_URL: postgres://demo:demo123@postgis:5433/demo
     ports:
       - "7800:7800"
     depends_on:
@@ -85,7 +85,7 @@ services:
     image: pramsey/pg_featureserv:latest
     container_name: demo-featureserv
     environment:
-      DATABASE_URL: postgres://demo:demo123@postgis:5432/demo
+      DATABASE_URL: postgres://demo:demo123@postgis:5433/demo
     ports:
       - "9001:9000"
     depends_on:
