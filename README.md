@@ -16,7 +16,7 @@
 |---------|-----|-------|
 | **JupyterLab** | http://your-ip:8888 | No password |
 | **VS Code** | http://your-ip:8444 | Password: `demo` |
-| **Superset** | http://your-ip:8088 | admin / admin |
+| **Superset** | http://your-ip:8089 | admin / admin |
 | **Tile Server** | http://your-ip:7800 | N/A |
 | **Feature Server** | http://your-ip:9001 | N/A |
 | **PostGIS** | your-ip:5432 | demo / demo123 |
@@ -102,7 +102,7 @@ Get GeoJSON: http://your-ip:9001/collections/public.countries/items?limit=10
 
 ### 4. Build Dashboard (Superset - 5 min)
 
-1. Open http://your-ip:8088 (admin/admin)
+1. Open http://your-ip:8089 (admin/admin)
 2. **Settings** → **Database Connections** → **+ Database**
 3. Select PostgreSQL
 4. SQLAlchemy URI: `postgresql://demo:demo123@postgis:5432/demo`
