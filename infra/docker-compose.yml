@@ -21,7 +21,7 @@ services:
                -c maintenance_work_mem=128MB
 
   jupyterlab:
-    image: jupyter/scipy-notebook:latest
+    image: jupyter/datascience-notebook:python-3.11
     container_name: demo-jupyter
     user: root
     environment:
