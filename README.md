@@ -18,7 +18,7 @@
 | **VS Code** | http://your-ip:8443 | Password: `demo` |
 | **Superset** | http://your-ip:8088 | admin / admin |
 | **Tile Server** | http://your-ip:7800 | N/A |
-| **Feature Server** | http://your-ip:9000 | N/A |
+| **Feature Server** | http://your-ip:9001 | N/A |
 | **PostGIS** | your-ip:5432 | demo / demo123 |
 
 ## Quick Demo Script (15 minutes)
@@ -53,11 +53,11 @@ Tile URL: `http://your-ip:7800/public.countries/{z}/{x}/{y}.pbf`
 
 ### 3. Query Features API (Browser - 2 min)
 
-Open: http://your-ip:9000
+Open: http://your-ip:9001
 
 Click "collections" → "public.countries"
 
-Get GeoJSON: http://your-ip:9000/collections/public.countries/items?limit=10
+Get GeoJSON: http://your-ip:9001/collections/public.countries/items?limit=10
 
 ### 4. Build Dashboard (Superset - 5 min)
 
